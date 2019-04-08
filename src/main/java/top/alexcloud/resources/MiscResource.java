@@ -30,7 +30,7 @@ public class MiscResource {
     public Response getApiInfo() {
         Map map = new HashMap<String, Object>() {{
             this.put("version", config.getVersion());
-            this.put("author", "Alexandr Chernov");
+            this.put("author", "ubuntolog");
         }};
         LOGGER.info("API info was requested");
         return Response.ok(map).build();
