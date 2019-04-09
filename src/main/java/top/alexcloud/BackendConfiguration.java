@@ -10,7 +10,7 @@ public class BackendConfiguration extends Configuration {
     @Valid
     @NotNull
     private String version;
-    private String dbFolder;
+    private String dbFullPath;
     private String dbUser;
     private String dbPassword;
 
@@ -19,9 +19,9 @@ public class BackendConfiguration extends Configuration {
         return version;
     }
 
-    @JsonProperty("dbFolder")
-    public String getDbFolder() {
-        return dbFolder;
+    @JsonProperty("dbFullPath")
+    public String getDbFullPath() {
+        return dbFullPath;
     }
 
     @JsonProperty("dbUser")

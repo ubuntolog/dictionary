@@ -36,53 +36,29 @@ public class MiscResource {
         return Response.ok(map).build();
     }
 
-    @GET
-    @Path("/booking")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public Response getAllBookings() throws SQLException {
-        Database db = new Database(config);
-        LOGGER.info("All bookings were requested");
-
-        List<Booking> foundBookings = db.selectBooking();
-        if (foundBookings.size()>0) {
-            return Response.ok(foundBookings).build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).entity("There are no bookings found").build();
-        }
-    }
 
     @GET
-    @Path("/booking/{id}")
+    @Path("/word/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public Response getBooking(@PathParam("id") Integer id) throws SQLException {
         Database db = new Database(config);
-        LOGGER.info("Booking was requested");
+        LOGGER.info("A word was requested");
 
-        List<Booking> foundBookings = db.selectBooking(id);
-        if (foundBookings.size()>0) {
-            return Response.ok(foundBookings).build();
-        } else {
+//        List<Booking> foundBookings = db.selectBooking(id);
+//        if (foundBookings.size()>0) {
+//            return Response.ok(foundBookings).build();
+//        } else {
             return Response.status(Response.Status.NOT_FOUND).entity("The booking was not found").build();
-        }
+//        }
     }
 
     @POST
-    @Path("/booking")
+    @Path("/word")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public Response makeBooking(@FormDataParam("name") final String name,
-                                   @FormDataParam("email") final String email,
-                                   @FormDataParam("phone") final String phone,
-                                   @FormDataParam("salary") final Integer salary,
-                                   @FormDataParam("age") final Integer age,
-                                   @FormDataParam("pets") final boolean pets,
-                                   @FormDataParam("tenantsNum") final Integer tenantsNum,
-                                   @FormDataParam("space") final Integer space,
-                                   @FormDataParam("floor") final Integer floor,
-                                   @FormDataParam("roomsNum") final Integer roomsNum,
-                                   @FormDataParam("rentPeriod") final Integer rentPeriod) {
+    public Response makeBooking(@FormDataParam("query") final String query) {
 
-        LOGGER.info("Trying to add a booking");
+        LOGGER.info("Trying to find a word / similar words");
         return Response.ok().build();
     }
 }

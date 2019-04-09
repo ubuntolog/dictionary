@@ -10,6 +10,6 @@ server:
       port: 8089
 
 version: 1.0.0
-dbFolder: ~/
+dbFullPath: base.db
 dbUser: ~
 dbPassword: ~

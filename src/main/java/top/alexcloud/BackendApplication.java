@@ -36,25 +36,25 @@ public class BackendApplication extends Application<BackendConfiguration> {
         environment.jersey().register(MultiPartFeature.class);
         environment.jersey().register(miscResource);
         environment.jersey().setUrlPattern("/api/*");
-        environment.healthChecks().register("minimal-react", new AppHealthCheck());
+        environment.healthChecks().register("dictionary", new AppHealthCheck());
 
         Database db = new Database(configuration);
-        if (!db.doesDBExist()) {
-            LOGGER.warn("database does not exist");
-            try {
-                db.createBookingTable();
-                LOGGER.info("created an empty table");
-                LOGGER.info("adding fake records to the table");
-                try {
-                    db.populateBookingTable();
-                } catch (SQLException e) {
-                    LOGGER.error("failed to populate the table: " + e.getMessage());
-                }
-            } catch (SQLException e) {
-                LOGGER.error("failed to create a table: " + e.getMessage());
-            }
-
-
-        }
+//        if (!db.doesDBExist()) {
+//            LOGGER.warn("database does not exist");
+//            try {
+//                db.createBookingTable();
+//                LOGGER.info("created an empty table");
+//                LOGGER.info("adding fake records to the table");
+//                try {
+//                    db.populateBookingTable();
+//                } catch (SQLException e) {
+//                    LOGGER.error("failed to populate the table: " + e.getMessage());
+//                }
+//            } catch (SQLException e) {
+//                LOGGER.error("failed to create a table: " + e.getMessage());
+//            }
+//
+//
+//        }
     }
 }
