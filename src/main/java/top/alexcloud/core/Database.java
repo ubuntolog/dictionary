@@ -87,14 +87,7 @@ public class Database {
 
     public static Query findWord(String queryText) {
         String uniqueID = UUID.randomUUID().toString();
-
-        Query currentQuery = new Query();
-        currentQuery.id = uniqueID;
-        currentQuery.text = queryText;
-        currentQuery.state = Query.QueryState.INITIAL;
-        currentQuery.statusMessage = "Initializing a new query";
-        currentQuery.resultsFound = 0;
-        currentQuery.modifiedTime = System.currentTimeMillis();
+        Query currentQuery = new Query(uniqueID, queryText, Query.QueryState.INITIAL, "Initializing a new query", 0, System.currentTimeMillis());
 
         allQueries.put(uniqueID, currentQuery);
         allResults.put(uniqueID, new HashMap<>());
@@ -141,6 +134,13 @@ public class Database {
     public static Query findQueryInfo(String id) {
         if (allQueries.containsKey(id)) {
             return allQueries.get(id);
+        }
+        return null;
+    }
+
+    public static HashMap<Integer, Match> findQueryMatches(String id) {
+        if (allResults.containsKey(id)) {
+            return allResults.get(id);
         }
         return null;
     }
