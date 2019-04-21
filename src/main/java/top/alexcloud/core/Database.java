@@ -20,7 +20,8 @@ public class Database {
     private static String dbPassword = "";
     private static Connection dbConnection;
 
-    private static ConcurrentHashMap<String, HashMap<Integer, String>> allResults = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, HashMap<Integer, Match>> allResults = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, Query> allQueries = new ConcurrentHashMap<>();
 
     public Database(BackendConfiguration params) {
         dbFullPath = params.getDbFullPath();
@@ -84,38 +85,65 @@ public class Database {
         return searchResults;
     }
 
-    public static HashMap<Integer, String> findWord(String word) {
+    public static Query findWord(String queryText) {
         String uniqueID = UUID.randomUUID().toString();
-        Long lastAccess = System.currentTimeMillis();
-        HashMap<Integer,String> searchResults = new HashMap<>();
+
+        Query currentQuery = new Query();
+        currentQuery.id = uniqueID;
+        currentQuery.text = queryText;
+        currentQuery.state = Query.QueryState.INITIAL;
+        currentQuery.statusMessage = "Initializing a new query";
+        currentQuery.resultsFound = 0;
+        currentQuery.modifiedTime = System.currentTimeMillis();
+
+        allQueries.put(uniqueID, currentQuery);
+        allResults.put(uniqueID, new HashMap<>());
 
         new Thread(() -> {
+            Query runningQuery = allQueries.get(uniqueID);
+            Integer resultsCount = 0;
             PreparedStatement pstmt = null;
-            String sql = "SELECT * FROM entry WHERE word LIKE ? ORDER BY word ASC";
+            String sql = "SELECT entry.id AS id, entry.word AS word, entry.meaning AS meaning, dictionary.id AS dict_id, dictionary.name AS dict_name FROM entry INNER JOIN dictionary ON entry.dictionary_id = dictionary.id WHERE entry.word LIKE ? ORDER BY entry.word ASC";
             try {
                 pstmt = dbConnection.prepareStatement(sql);
-                pstmt.setString(1, word);
+                pstmt.setString(1, queryText);
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
-                    searchResults.put(rs.getInt("id"), rs.getString("meaning"));
+                    allResults.get(uniqueID).put(rs.getInt("id"), new Match(rs.getString("word"), rs.getString("dict_name"), rs.getString("meaning")));
+                    runningQuery.state = Query.QueryState.RUNNING;
+                    runningQuery.statusMessage = "Query is running";
+                    runningQuery.resultsFound = resultsCount++;
                 }
                 rs.close();
 
             } catch (SQLException e) {
                 LOGGER.error(e.getMessage());
+                runningQuery.state = Query.QueryState.FAILED;
+                runningQuery.statusMessage = "Error while executing the query: " + e.getMessage();
             } finally {
                 try {
                     pstmt.close();
+                    runningQuery.state = Query.QueryState.FINISHED;
+                    runningQuery.statusMessage = "The query has been executed successfully";
                 } catch (SQLException e) {
                     LOGGER.error(e.getMessage());
+                    runningQuery.state = Query.QueryState.FAILED;
+                    runningQuery.statusMessage = "Error while finishing the query: " + e.getMessage();
                 }
             }
+            allQueries.put(uniqueID, runningQuery);
         }).start();
 
 
-        return searchResults;
+        return allQueries.get(uniqueID);
     }
 
+    public static Query findQueryInfo(String id) {
+        if (allQueries.containsKey(id)) {
+            return allQueries.get(id);
+        }
+        return null;
+    }
 
 
 }

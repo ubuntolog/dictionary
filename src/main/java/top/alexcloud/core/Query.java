@@ -14,19 +14,21 @@ public class Query {
     public String id;
     public String text;
     public QueryState state;
-    public Long resultsFound;
-    public Long lifetime;
+    public String statusMessage;
+    public Integer resultsFound;
+    public Long modifiedTime;
 
     public Query() {
         // Needed by Jackson deserialization
     }
 
-    public Query(String id, String text, QueryState state, Long resultsFound, Long lifetime) {
+    public Query(String id, String text, QueryState state, String statusMessage, Integer resultsFound, Long modifiedTime) {
         this.id = id;
         this.text = text;
         this.state = state;
+        this.statusMessage = statusMessage;
         this.resultsFound = resultsFound;
-        this.lifetime = lifetime;
+        this.modifiedTime = modifiedTime;
     }
 
     @JsonProperty
@@ -45,13 +47,18 @@ public class Query {
     }
 
     @JsonProperty
-    public Long getResultsFound() {
+    public String getStatusMessage() {
+        return statusMessage;
+    }
+
+    @JsonProperty
+    public Integer getResultsFound() {
         return resultsFound;
     }
 
     @JsonProperty
-    public Long getLifetime() {
-        return lifetime;
+    public Long getModifiedTime() {
+        return modifiedTime;
     }
 
 }
