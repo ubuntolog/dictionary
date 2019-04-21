@@ -1,6 +1,5 @@
 package top.alexcloud.resources;
 
-import top.alexcloud.core.Booking;
 import top.alexcloud.BackendConfiguration;
 import top.alexcloud.core.Database;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -11,7 +10,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Path("")
@@ -20,9 +18,17 @@ public class MiscResource {
 
     private final BackendConfiguration config;
 
+    private final Database db;
+
     public MiscResource(BackendConfiguration config) {
         this.config = config;
+        this.db = new Database(config);
     }
+
+    protected void finalize ()  {
+        db.closeConnection();
+    }
+
 
     @GET
     @Path("/info")
@@ -38,27 +44,29 @@ public class MiscResource {
 
 
     @GET
-    @Path("/word/{id}")
+    @Path("/dictionary/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public Response getBooking(@PathParam("id") Integer id) throws SQLException {
-        Database db = new Database(config);
-        LOGGER.info("A word was requested");
-
-//        List<Booking> foundBookings = db.selectBooking(id);
-//        if (foundBookings.size()>0) {
-//            return Response.ok(foundBookings).build();
-//        } else {
-            return Response.status(Response.Status.NOT_FOUND).entity("The booking was not found").build();
-//        }
+    public Response getDictInfo(@PathParam("id") Integer id) {
+//        Database db = new Database(config);
+        LOGGER.info("Information about {} dictionary was requested", id);
+        HashMap<Integer,String> results = db.findDictInfo(id);
+        if (results.size() > 0) {
+            return Response.ok(results).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).entity("Dictionary was not found").build();
+        }
     }
 
     @POST
     @Path("/word")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public Response makeBooking(@FormDataParam("query") final String query) {
+    public Response runQuery(@FormDataParam("query") final String query) {
+//        Database db = new Database(config);
+        HashMap<Integer,String> results = db.findWord(query);
 
         LOGGER.info("Trying to find a word / similar words");
-        return Response.ok().build();
+//        db.closeConnection();
+        return Response.ok(results).build();
     }
 }

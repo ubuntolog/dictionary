@@ -38,7 +38,8 @@ public class BackendApplication extends Application<BackendConfiguration> {
         environment.jersey().setUrlPattern("/api/*");
         environment.healthChecks().register("dictionary", new AppHealthCheck());
 
-        Database db = new Database(configuration);
+
+
 //        if (!db.doesDBExist()) {
 //            LOGGER.warn("database does not exist");
 //            try {

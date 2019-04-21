@@ -2,12 +2,14 @@ package top.alexcloud.core;
 
 import top.alexcloud.BackendConfiguration;
 import top.alexcloud.resources.MiscResource;
-import org.h2.tools.DeleteDbFiles;
+
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.HashMap;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class Database {
@@ -18,16 +20,18 @@ public class Database {
     private static String dbPassword = "";
     private static Connection dbConnection;
 
+    private static ConcurrentHashMap<String, HashMap<Integer, String>> allResults = new ConcurrentHashMap<>();
+
     public Database(BackendConfiguration params) {
         dbFullPath = params.getDbFullPath();
         dbUser = params.getDbUser();
         dbPassword = params.getDbPassword();
 
-        try {
-            Class.forName("org.sqlite.JDBC");
-        } catch (ClassNotFoundException e) {
-            LOGGER.error(e.getMessage());
-        }
+//        try {
+//            Class.forName("org.sqlite.JDBC");
+//        } catch (ClassNotFoundException e) {
+//            LOGGER.error(e.getMessage());
+//        }
         try {
             dbConnection = DriverManager.getConnection(connectionPrefix + dbFullPath);
             LOGGER.info("Connection to the database has been established '{}'", dbFullPath);
@@ -54,16 +58,17 @@ public class Database {
         }
     }
 
-    public static int findWord(String word) {
-        int number = -1;
+
+    public static HashMap<Integer, String> findDictInfo(Integer id) {
+        HashMap<Integer,String> searchResults = new HashMap<>();
         PreparedStatement pstmt = null;
-        String sql = "SELECT * FROM entry WHERE word LIKE ? ORDER BY word ASC";
+        String sql = "SELECT * FROM dictionary WHERE id = ?";
         try {
             pstmt = dbConnection.prepareStatement(sql);
-            pstmt.setString(1, word);
+            pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                number = rs.getInt("id");
+                searchResults.put(rs.getInt("id"), rs.getString("description"));
             }
             rs.close();
 
@@ -76,7 +81,39 @@ public class Database {
                 LOGGER.error(e.getMessage());
             }
         }
-        return number;
+        return searchResults;
+    }
+
+    public static HashMap<Integer, String> findWord(String word) {
+        String uniqueID = UUID.randomUUID().toString();
+        Long lastAccess = System.currentTimeMillis();
+        HashMap<Integer,String> searchResults = new HashMap<>();
+
+        new Thread(() -> {
+            PreparedStatement pstmt = null;
+            String sql = "SELECT * FROM entry WHERE word LIKE ? ORDER BY word ASC";
+            try {
+                pstmt = dbConnection.prepareStatement(sql);
+                pstmt.setString(1, word);
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    searchResults.put(rs.getInt("id"), rs.getString("meaning"));
+                }
+                rs.close();
+
+            } catch (SQLException e) {
+                LOGGER.error(e.getMessage());
+            } finally {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    LOGGER.error(e.getMessage());
+                }
+            }
+        }).start();
+
+
+        return searchResults;
     }
 
 
