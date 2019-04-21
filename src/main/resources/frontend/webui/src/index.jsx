@@ -16,9 +16,9 @@ import {fetchApiInfo} from './actions/actions';
 
 import {Grid, Row, Col, Button, Navbar, Well, Image} from 'react-bootstrap';
 
-import {RegistrationContainer} from './containers/RegistrationContainer';
-import Graph from './components/Graph';
+import {SearchAreaContainer} from './containers/SearchAreaContainer';
 import ErrorMessage from './components/ErrorMessage';
+import About from './components/About';
 
 require('../app/css/app.css');
 
@@ -56,13 +56,12 @@ class Frame extends React.Component {
             <div>
             <Row>  
                 <Col> 
-                    <Well bsSize="large">
+                    <Well>
                         <Row style={{margin:5}}>  
-                            <Col xs={2} sm={2} md={2} lg={2}> 
-                                <Image src="/images/house.svg" responsive />
+                            <Col xs={2} sm={2} md={2} lg={2}>                 
                             </Col>    
                             <Col xs={10} sm={10} md={10} lg={10}>
-                                <h2>Minimal React Application</h2>
+                                <h2>Dictionary Application</h2>
                             </Col>
                         </Row>
                     </Well>
@@ -91,8 +90,8 @@ class App extends React.Component {
                 <div>
                     <Router history={history}>
                         <Route path={window.APP_CONTEXT_PATH+'/'} component={Frame}>
-                            <IndexRoute component={Graph}/>                            
-                            <Route path={window.APP_CONTEXT_PATH+'/registration'} component={RegistrationContainer} />                        
+                            <IndexRoute component={SearchAreaContainer}/>
+                            <Route path={window.APP_CONTEXT_PATH+'/about'} component={About} />
                             <Route path='*' component={NotFound} />
                         </Route>
                     </Router>

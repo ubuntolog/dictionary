@@ -1,6 +1,5 @@
-# Minimal React Application
-This is a simple web application that has a Java backend and a React-based frontend. The backend uses a simple H2 database (stored in a file).
-The main page contains a minimal example of a D3 bar chart.
+# Dictionary Application
+Light and fast online dictionary app that allows to use custom made dictionaries.
 
 ## Running
 First, you need to build the frontend. Go to `src/main/resources/frontend` folder and run (npm and node are required):
@@ -22,16 +21,16 @@ make dependencies
 
 To run the backend use the following options (Java 8 is required):
 ```
-server minimal-react.yaml
+server dictionary.yaml
 ```
 
 ## Configuration
-Configuration options are stored in `minimal-react.yaml`
+Configuration options are stored in `dictionary.yaml`
 
 | Option            | Description |
 | ----------------- | ------- |
 | version | version number |
-| dbFolder | path to the database file |
+| dbFullPath | path to the database file |
 | dbUser   | database user name |
 | dbPassword | database password |
 
@@ -40,6 +39,7 @@ Configuration options are stored in `minimal-react.yaml`
 | URL            | Method | Description | 
 | ----------------- | ------ | ----------- |
 | /info | GET | information about the API |
-| /booking | GET | list of all bookings in JSON |
-| /booking | POST | adding a new booking |
-| /booking/{id} | GET | getting a particular booking by Id |
+| /dictionary/{id} | GET | information about a dictionary |
+| /query | POST | start a search query |
+| /query/{id} | GET | request a query status |
+| /query/{id}/matches | GET | list query matches for a given query |

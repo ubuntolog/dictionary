@@ -2,7 +2,6 @@ package top.alexcloud;
 
 import top.alexcloud.health.AppHealthCheck;
 import top.alexcloud.resources.MiscResource;
-import top.alexcloud.core.Database;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
@@ -11,8 +10,6 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.slf4j.LoggerFactory;
-
-import java.sql.SQLException;
 
 public class BackendApplication extends Application<BackendConfiguration> {
     private static final ch.qos.logback.classic.Logger LOGGER = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(MiscResource.class);
@@ -37,25 +34,5 @@ public class BackendApplication extends Application<BackendConfiguration> {
         environment.jersey().register(miscResource);
         environment.jersey().setUrlPattern("/api/*");
         environment.healthChecks().register("dictionary", new AppHealthCheck());
-
-
-
-//        if (!db.doesDBExist()) {
-//            LOGGER.warn("database does not exist");
-//            try {
-//                db.createBookingTable();
-//                LOGGER.info("created an empty table");
-//                LOGGER.info("adding fake records to the table");
-//                try {
-//                    db.populateBookingTable();
-//                } catch (SQLException e) {
-//                    LOGGER.error("failed to populate the table: " + e.getMessage());
-//                }
-//            } catch (SQLException e) {
-//                LOGGER.error("failed to create a table: " + e.getMessage());
-//            }
-//
-//
-//        }
     }
 }
