@@ -51,34 +51,25 @@ class SearchArea extends React.Component {
 
 
     handleSubmit(event) {
+        console.log("Submit");
         event.preventDefault();
         const data = new FormData(event.target);
 
-        for (let i = 0; i<formFields.length; i++) {
+        // for (let i = 0; i<formFields.length; i++) {
             
-            this.handleValidationWithNameAndValue(formFields[i], "");
+        //     this.handleValidationWithNameAndValue(formFields[i], "");
           
-        }
-        
+        // }
+        console.log(data.get("query"));
         this.props.actions.submitRegistration(
-                                                data.get(formFields[0]),
-                                                data.get(formFields[1]),
-                                                data.get(formFields[2]),
-                                                data.get(formFields[3]),
-                                                data.get(formFields[4]),
-                                                this.state.hasPets,
-                                                data.get(formFields[6]),
-                                                data.get(formFields[7]),
-                                                data.get(formFields[8]),
-                                                data.get(formFields[9]),
-                                                data.get(formFields[10])
+                                                data.get(formFields[0])                                               
                                             );
         this.props.actions.fetchBookings();
     }
 
-    handleFieldValidation(e) {
-        this.handleValidationWithNameAndValue(e.target.name, e.target.value);
-    }
+    // handleFieldValidation(e) {
+    //     this.handleValidationWithNameAndValue(e.target.name, e.target.value);
+    // }
 
     handleValidationWithNameAndValue(name, value) {
         console.log(name);
@@ -107,30 +98,38 @@ class SearchArea extends React.Component {
     }
 
     render() {
-        let validation = (this.props.validation ? this.props.validation : {});
+        // let validation = (this.props.validation ? this.props.validation : {});
       
-        let validationStatus = {};
-        for (let field of formFields) {
-            if (!(field in validation)) {
-                validationStatus[field] = {};
-                validationStatus[field]["state"] = null;
-                validationStatus[field]["message"] = "";
-            } else {
-                validationStatus[field] = validation[field];
-            }
-        }
-        console.log(validationStatus);
+        // let validationStatus = {};
+        // for (let field of formFields) {
+        //     if (!(field in validation)) {
+        //         validationStatus[field] = {};
+        //         validationStatus[field]["state"] = null;
+        //         validationStatus[field]["message"] = "";
+        //     } else {
+        //         validationStatus[field] = validation[field];
+        //     }
+        // }
+        // console.log(validationStatus);
         return(
+          
+            <form onSubmit={this.handleSubmit.bind(this)}>
+            <div className="form-group row" >
+                <div className="col-2">
                 
-                    <form className="form-inline" onSubmit={this.handleSubmit.bind(this)}>                        
-                        <div className="form-group mx-sm-6 mb-3">
-                            <label htmlFor="inputPassword2" className="sr-only">Password</label>
-                            <input type="text" className="form-control" id="inputPassword2" placeholder="Password" />
-                        </div>
-                        <button type="submit" className="btn btn-primary mb-3">Confirm identity</button>
-                    </form>
+                </div>
+                <div className="col-8">
+                    
+                        <input className="form-control" name="query" type="text" placeholder="Enter a word" />
+                  
+                </div>
+                <div className="col-2">
+                
+                </div>
+            </div>
+                 
 
-                            
+            </form>                 
                    
            
         )

@@ -8,10 +8,10 @@ class ErrorMessage extends React.Component {
 
     render() {
         return(
-            <div class="jumbotron jumbotron-fluid">
-                <div class="container">
-                    <h1 class="display-4">{this.props.title}</h1>
-                    <p class="lead"> {this.props.content}</p>
+            <div className="jumbotron jumbotron-fluid">
+                <div className="container">
+                    <h1 className="display-4">{this.props.title}</h1>
+                   {this.props.content}
                 </div>
             </div>
         )
