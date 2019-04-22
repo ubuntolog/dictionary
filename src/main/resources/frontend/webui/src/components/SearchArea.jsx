@@ -1,20 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Grid, Col, Row, FormGroup, FormControl, Button, Glyphicon, ButtonToolbar, Modal, InputGroup} from 'react-bootstrap';
+// import {Grid, Col, Row, FormGroup, FormControl, Button, Glyphicon, ButtonToolbar, Modal} from 'react-bootstrap';
+// import {InputGroup} from 'react-bootstrap/InputGroup';
 
 const formFields = ["name", "email", "phone", "salary", "age", "pets", "tenantsNum", "space", "floor", "roomsNum", "rentPeriod"];
-const BookingsTableRow = ({name, email}) => {
-    return (
-        <Row style={{marginTop:10}}>
-            <Col xs={4} sm={4} md={4} lg={4} >
-                {name}
-            </Col>
-            <Col xs={4} sm={4} md={4} lg={4} >
-                {email}
-            </Col>
-        </Row>
-    );
-}
+// const BookingsTableRow = ({name, email}) => {
+//     return (
+//         <Row style={{marginTop:10}}>
+//             <Col xs={4} sm={4} md={4} lg={4} >
+//                 {name}
+//             </Col>
+//             <Col xs={4} sm={4} md={4} lg={4} >
+//                 {email}
+//             </Col>
+//         </Row>
+//     );
+// }
 class SearchArea extends React.Component {
     constructor(props) {
         super(props);
@@ -120,58 +121,18 @@ class SearchArea extends React.Component {
         }
         console.log(validationStatus);
         return(
-                <div>
+                
+                    <form className="form-inline" onSubmit={this.handleSubmit.bind(this)}>                        
+                        <div className="form-group mx-sm-6 mb-3">
+                            <label htmlFor="inputPassword2" className="sr-only">Password</label>
+                            <input type="text" className="form-control" id="inputPassword2" placeholder="Password" />
+                        </div>
+                        <button type="submit" className="btn btn-primary mb-3">Confirm identity</button>
+                    </form>
 
+                            
                    
-                            <form onSubmit={this.handleSubmit.bind(this)}>
-                            <FormGroup
-                                controlId="nameGroup"
-                                validationState={validationStatus[formFields[0]]["state"]}
-                            >
-                                <InputGroup>
-                                    <FormControl
-                                        type="text"
-                                        placeholder="Enter your name"
-                                        name={formFields[0]}
-                                        onChange={this.handleFieldValidation}                                   
-                                    />
-                                   <InputGroup.Append>
-                                        <Button variant="outline-secondary" type="submit">Find</Button>
-                                   </InputGroup.Append>
-                                </InputGroup>  
-                            </FormGroup>
-
-                          
-
-                          
-                                
-                                {/* <Button title="Get help" onClick={this.handleShow}>
-                                    <Glyphicon glyph="info-sign" />
-                                </Button> */}
-
-                               
-
-
-                                          
-                        </form> 
-
-
-                        <Modal show={this.state.show} onHide={this.handleClose}>
-                            <Modal.Header closeButton>
-                                <Modal.Title>About this application</Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                <h4>User registration form {this.props.apiinfo.version}</h4>
-                                <p>
-                                    This application was developed by {this.props.apiinfo.author}
-                                </p>
-                            </Modal.Body>
-                            <Modal.Footer>
-                                <Button onClick={this.handleClose}>Close</Button>
-                            </Modal.Footer>
-                        </Modal>
-                   
-            </div>
+           
         )
     }
 }

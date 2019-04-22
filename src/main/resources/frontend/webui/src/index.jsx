@@ -14,7 +14,7 @@ require('react-s-alert/dist/s-alert-css-effects/slide.css');
 import rootReducers from './actions/reducers';
 import {fetchApiInfo} from './actions/actions';
 
-import {Grid, Row, Col, Button, Navbar, Well, Image} from 'react-bootstrap';
+// import {Grid, Row, Col, Button, Navbar, Well, Image} from 'react-bootstrap';
 
 import {SearchAreaContainer} from './containers/SearchAreaContainer';
 import ErrorMessage from './components/ErrorMessage';
@@ -54,24 +54,17 @@ class Frame extends React.Component {
     render() {
         return (
             <div>
-            <Row>  
-                <Col> 
-                    <Well>
-                        <Row style={{margin:5}}>  
-                            <Col xs={2} sm={2} md={2} lg={2}>                 
-                            </Col>    
-                            <Col xs={10} sm={10} md={10} lg={10}>
-                                <h2>Dictionary Application</h2>
-                            </Col>
-                        </Row>
-                    </Well>
-                </Col>
-            </Row>
-            <Row>
-                <Col className="pull-center">
-                    {this.props.children}
-                </Col>
-            </Row>
+                <div className="card">
+                    <div className="card-header">
+                        <h2>Dictionary Application</h2>
+                    </div>
+                    <div className="card-body">
+                        <blockquote className="blockquote mb-0">
+                        {this.props.children}
+                        <footer className="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+                        </blockquote>
+                    </div>
+                </div>
             </div>
        )
     }
@@ -104,11 +97,9 @@ class App extends React.Component {
 }
 
 const NotFound = () => (
-    <Row>
-        <Col xs={12} sm={12} md={12} lg={12} className="pull-center">
-            <ErrorMessage title={"Page not found"} content={<p>The requested page does not exist. Please check the URL or try to start from the <a href={window.APP_CONTEXT_PATH+"/"}>main page</a></p>} />
-        </Col>
-    </Row>
+    <div>
+        <ErrorMessage title={"Page not found"} content={<p>The requested page does not exist. Please check the URL or try to start from the <a href={window.APP_CONTEXT_PATH+"/"}>main page</a></p>} />
+    </div>
 );
 
 render(<App />, document.getElementById('react') );

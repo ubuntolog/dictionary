@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Grid, Row, Col, Jumbotron} from 'react-bootstrap';
 
 class ErrorMessage extends React.Component {
     constructor(props) {
@@ -9,16 +8,12 @@ class ErrorMessage extends React.Component {
 
     render() {
         return(
-            <Grid className="container-90-grid">
-                <Row>
-                    <Col>
-                        <Jumbotron>
-                            <h1>{this.props.title}</h1>
-                            {this.props.content}
-                        </Jumbotron>
-                    </Col>
-                </Row>
-            </Grid>
+            <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                    <h1 class="display-4">{this.props.title}</h1>
+                    <p class="lead"> {this.props.content}</p>
+                </div>
+            </div>
         )
     }
 }
